@@ -3,11 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #faf7f0;
   --text: #463239;
   --extra: #7fb285;
   --extraa: #ff748b;
   --extraaa: #437c90;
+}
+
+:root::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+:root {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -21,4 +31,12 @@ body {
   color: var(--text);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.fade-in {
+  transition: opacity 1s ease;
+}
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease;
 }
