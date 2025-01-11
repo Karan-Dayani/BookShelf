@@ -5,10 +5,13 @@ const baseUrl = "http://localhost:6969";
 export const fetchBooks = async (
   limit: number,
   page: number,
-  genre: string
+  genre: string,
+  search: string
 ): Promise<{ data: book[]; status: number } | Error> => {
   const books = await axios
-    .get(`${baseUrl}/getBooks?limit=${limit}&page=${page}&genre=${genre}`)
+    .get(
+      `${baseUrl}/getBooks?limit=${limit}&page=${page}&genre=${genre}&search=${search}`
+    )
     .then((res) => res);
 
   if (books.status === 200) {
@@ -18,9 +21,13 @@ export const fetchBooks = async (
   }
 };
 
-export const getCount = async (table: string, genre: string) => {
+export const getCount = async (
+  table: string,
+  genre: string,
+  search: string
+) => {
   const count = await axios
-    .get(`${baseUrl}/count/${table}?genre=${genre}`)
+    .get(`${baseUrl}/count/${table}?genre=${genre}&search=${search}`)
     .then((res) => res);
 
   if (count.status === 200) {

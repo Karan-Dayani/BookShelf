@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { fetchBooks, getCount, getGenres } from "../api/api";
 import { book } from "../interface";
 import Pagination from "../(components)/Pagination";
@@ -19,8 +19,16 @@ export default function Books() {
   const [genres, setGenres] = useState<{ genre: string }[]>();
   const [selectedFilter, setSelectedFilter] = useState<string>("Filter");
 
+  const [searchTrigger, setSearchTrigger] = useState<boolean>(true);
+  const searchInputRef = useRef<string>("");
+
   const filterMenuToggle = () => {
     setFilterMenu((prev) => !prev);
+  };
+
+  const handleSearch = () => {
+    console.log(searchInputRef.current);
+    setSearchTrigger((prev) => !prev);
   };
 
   useEffect(() => {
@@ -39,7 +47,12 @@ export default function Books() {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
-      const books = await fetchBooks(pageLimit, page, selectedFilter);
+      const books = await fetchBooks(
+        pageLimit,
+        page,
+        selectedFilter,
+        searchInputRef.current
+      );
       if (books.status === 200) {
         if ("data" in books) {
           setBooks(books.data as book[]);
@@ -48,7 +61,11 @@ export default function Books() {
       }
     };
     const fetchCount = async () => {
-      const count = await getCount("books", selectedFilter);
+      const count = await getCount(
+        "books",
+        selectedFilter,
+        searchInputRef.current
+      );
       if (count.status === 200) {
         if ("data" in count) {
           setMaxPage(Math.ceil(Number(count.data[0].count) / pageLimit));
@@ -57,7 +74,7 @@ export default function Books() {
     };
     fetchCount();
     fetchData();
-  }, [page, selectedFilter]);
+  }, [page, selectedFilter, searchTrigger]);
 
   return (
     <div className="p-6 space-y-4">
@@ -67,9 +84,14 @@ export default function Books() {
             placeholder="Search..."
             className="input shadow-lg border-gray-300 px-5 py-3 rounded-xl w-56 transition-all focus:w-64 outline-none"
             name="search"
+            onChange={(e) => (searchInputRef.current = e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             autoComplete="off"
           />
-          <CiSearch className="size-6 absolute top-3 right-3" />
+          <CiSearch
+            className="size-6 absolute top-3 right-3"
+            onClick={handleSearch}
+          />
         </div>
         <div className="flex items-center gap-1 relative">
           <button
@@ -118,15 +140,19 @@ export default function Books() {
         <div className="flex justify-center">
           <div className="w-7 h-7 border-4 border-t-text border-background rounded-full animate-spin"></div>
         </div>
-      ) : (
+      ) : books && books.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {books?.map((book) => (
+            {books.map((book) => (
               <BookCard key={book.id} book={book} />
             ))}
           </div>
           <Pagination page={page} setPage={setPage} maxPage={maxPage} />
         </>
+      ) : (
+        <div className="text-center">
+          <h1>Sowwy! got nothing</h1>
+        </div>
       )}
     </div>
   );
