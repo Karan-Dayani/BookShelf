@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <SessionWrapper>
-      <html lang="en" className="cursor-crosshair">
+      <html lang="en" className="">
         <body className={`${outfit.className} antialiased`}>
           <Header />
           {children}
