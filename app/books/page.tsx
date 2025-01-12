@@ -7,8 +7,10 @@ import BookCard from "../(components)/BookCard";
 import { CiSearch } from "react-icons/ci";
 import { IoFilterOutline } from "react-icons/io5";
 import { MdFilterListOff } from "react-icons/md";
+import { useSearchParams } from "next/navigation";
 
 export default function Books() {
+  const searchParam = useSearchParams().get("search");
   const pageLimit = 9;
   const [page, setPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
@@ -32,6 +34,7 @@ export default function Books() {
   };
 
   useEffect(() => {
+    searchInputRef.current = !searchParam ? "" : searchParam;
     const fetchGenres = async () => {
       const genres = await getGenres();
       if (genres.status === 200) {
@@ -42,11 +45,12 @@ export default function Books() {
     };
 
     fetchGenres();
-  }, []);
+  }, [searchParam]);
 
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       const books = await fetchBooks(
         pageLimit,
         page,
@@ -84,6 +88,7 @@ export default function Books() {
             placeholder="Search..."
             className="input shadow-lg border-gray-300 px-5 py-3 rounded-xl w-56 transition-all focus:w-64 outline-none"
             name="search"
+            defaultValue={searchInputRef.current}
             onChange={(e) => (searchInputRef.current = e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             autoComplete="off"
@@ -117,7 +122,7 @@ export default function Books() {
                     setSelectedFilter("Filter");
                   }}
                 >
-                  <MdFilterListOff className="size-5" /> Remove Filter
+                  <MdFilterListOff className="size-5" /> Clear Filter
                 </button>
               )}
               {genres?.map((genre, i) => (

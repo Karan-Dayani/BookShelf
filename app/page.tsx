@@ -1,6 +1,7 @@
 "use client";
 // import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 
@@ -21,6 +22,11 @@ const quotes = [
 
 export default function Home() {
   // const { data: session } = useSession();
+  const [query, setQuery] = useState<string>("");
+
+  const handleSearch = () => {
+    redirect(`/books?search=${query}`);
+  };
 
   const [fadeProp, setFadeProp] = useState<{ fade: string }>({
     fade: "fade-in",
@@ -84,8 +90,14 @@ export default function Home() {
               type="text"
               placeholder="Search Books..."
               className="px-2 py-1 rounded-l-md border-4 border-text !outline-none"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="px-2 py-1 bg-text text-background rounded-r-md flex items-center">
+            <button
+              className="px-2 py-1 bg-text text-background rounded-r-md flex items-center"
+              onClick={handleSearch}
+            >
               <IoSearchOutline size={32} />
             </button>
           </div>
@@ -110,8 +122,14 @@ export default function Home() {
                 type="text"
                 placeholder="Search Books..."
                 className="px-4 py-2 rounded-l-md border-4 border-text !outline-none"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
-              <button className="px-4 py-2 bg-text text-background rounded-r-md flex items-center">
+              <button
+                className="px-4 py-2 bg-text text-background rounded-r-md flex items-center"
+                onClick={handleSearch}
+              >
                 <IoSearchOutline size={32} />
               </button>
             </div>
