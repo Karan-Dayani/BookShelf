@@ -12,16 +12,40 @@ const Pagination: React.FC<PaginationProps> = ({ page, setPage, maxPage }) => {
       setPage(page + 1);
     }
   };
+
+  const getPageNumber = (pageNumber: number) => {
+    return pageNumber >= 1 && pageNumber <= maxPage ? pageNumber : null;
+  };
   return (
     <div>
-      <div className="flex gap-3 items-center justify-center text-2xl">
+      <div className="flex gap-3 items-center justify-center text-lg">
         <button
           className="bg-text p-2 text-background rounded-full"
           onClick={pageMinus}
         >
           <GrFormPrevious className="size-5" />
         </button>
-        <h1>{page}</h1>
+        {getPageNumber(page - 2) && (
+          <h1 onClick={() => setPage(page - 2)} className="cursor-pointer">
+            {page - 2}
+          </h1>
+        )}
+        {getPageNumber(page - 1) && (
+          <h1 onClick={() => setPage(page - 1)} className="cursor-pointer">
+            {page - 1}
+          </h1>
+        )}
+        <h1 className="font-bold text-2xl">{page}</h1>
+        {getPageNumber(page + 1) && (
+          <h1 onClick={() => setPage(page + 1)} className="cursor-pointer">
+            {page + 1}
+          </h1>
+        )}
+        {getPageNumber(page + 2) && (
+          <h1 onClick={() => setPage(page + 2)} className="cursor-pointer">
+            {page + 2}
+          </h1>
+        )}
         <button
           className="bg-text p-2 text-background rounded-full"
           onClick={pagePlus}

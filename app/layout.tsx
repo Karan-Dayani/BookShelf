@@ -22,6 +22,7 @@ export default function RootLayout({
         <body className={`${outfit.className} antialiased`}>
           <Header />
           {children}
+          <div id="modal-container"></div>
         </body>
       </html>
     </SessionWrapper>

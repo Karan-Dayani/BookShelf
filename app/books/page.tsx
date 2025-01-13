@@ -29,7 +29,7 @@ export default function Books() {
   };
 
   const handleSearch = () => {
-    console.log(searchInputRef.current);
+    setPage(1);
     setSearchTrigger((prev) => !prev);
   };
 
@@ -85,7 +85,7 @@ export default function Books() {
       <div className="flex items-center justify-between">
         <div className="relative">
           <input
-            placeholder="Search..."
+            placeholder="Search by title,author..."
             className="input shadow-lg border-gray-300 px-5 py-3 rounded-xl w-56 transition-all focus:w-64 outline-none"
             name="search"
             defaultValue={searchInputRef.current}
@@ -120,6 +120,7 @@ export default function Books() {
                   onClick={() => {
                     filterMenuToggle();
                     setSelectedFilter("Filter");
+                    setPage(1);
                   }}
                 >
                   <MdFilterListOff className="size-5" /> Clear Filter

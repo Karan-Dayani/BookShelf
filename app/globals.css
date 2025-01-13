@@ -49,3 +49,38 @@ body {
 .scrollbar::-webkit-scrollbar-thumb {
   border: 2px solid #555555;
 }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.modal {
+  position: relative;
+  /* background: var(--background); */
+  /* border-radius: 8px; */
+  /* border: 1px solid #ddd; */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+  z-index: 1001;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.modal-overlay.show .modal {
+  opacity: 1;
+  transform: scale(1);
+}

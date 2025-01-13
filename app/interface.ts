@@ -20,3 +20,9 @@ export interface PaginationProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   maxPage: number;
 }
+
+export interface CustomModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
