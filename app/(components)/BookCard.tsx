@@ -2,9 +2,17 @@ import Image from "next/image";
 import { book } from "../interface";
 import { useState } from "react";
 import { CustomModal } from "./CustomModal";
+import { useSession } from "next-auth/react";
+import { updateBook } from "../api/api";
 
 const BookCard = ({ book }: { book: book }) => {
-  const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
+  const { data: session } = useSession();
+  const [detailModal, setDetailModal] = useState<boolean>(false);
+  const [editModal, setEditModal] = useState<boolean>(false);
+  const [latestCopies, setLatestCopies] = useState<number>(book.copies);
+  const [issuingStatus, setIssuingStatus] = useState<boolean>(
+    book.is_available
+  );
   const [imgStatus, setImgStatus] = useState<"loading" | "loaded" | "error">(
     "loading"
   );
@@ -12,16 +20,75 @@ const BookCard = ({ book }: { book: book }) => {
     "loading" | "loaded" | "error"
   >("loading");
 
-  const BookOpen = () => {
-    setIsCustomModalOpen(true);
-  };
-
   return (
     <>
       <CustomModal
-        isOpen={isCustomModalOpen}
-        onClose={() => setIsCustomModalOpen(false)}
+        isOpen={editModal}
+        onClose={() => {
+          setEditModal(false);
+          setDetailModal(true);
+        }}
       >
+        <div className="bg-background rounded-lg p-4 md:p-6 flex items-end justify-around">
+          {/* <button onClick={() => window.location.reload()}>Relode</button> */}
+          <div>
+            <h1 className="text-lg font-medium">Copies</h1>
+            <div className="flex border border-text text-xl rounded-lg">
+              <div
+                className="py-2 px-4 bg-text text-background cursor-pointer rounded-l-md"
+                onClick={() => {
+                  setLatestCopies((prev) => (prev > 0 ? prev - 1 : prev));
+                }}
+              >
+                -
+              </div>
+              <div className="py-2 px-4">{latestCopies}</div>
+              <div
+                className="py-2 px-4 bg-text text-background cursor-pointer rounded-r-md"
+                onClick={() => {
+                  setLatestCopies((prev) => prev + 1);
+                }}
+              >
+                +
+              </div>
+            </div>
+          </div>
+          <div>
+            {issuingStatus ? (
+              <div
+                onClick={() => setIssuingStatus((prev) => !prev)}
+                className="py-2 px-4 text-lg font-medium bg-red-500 border border-red-500 bg-opacity-50 text-text rounded-md cursor-pointer"
+              >
+                Pause Issuing
+              </div>
+            ) : (
+              <div
+                onClick={() => setIssuingStatus((prev) => !prev)}
+                className="py-2 px-4 text-lg font-medium bg-green-500 border border-green-500 bg-opacity-50 text-text rounded-md cursor-pointer"
+              >
+                Unpause Issuing
+              </div>
+            )}
+          </div>
+          <div
+            onClick={() => {
+              updateBook(
+                book.id,
+                latestCopies,
+                latestCopies === 0
+                  ? false
+                  : book.copies === 0 && latestCopies > 0
+                  ? true
+                  : issuingStatus
+              );
+            }}
+            className="bg-green-500 py-2 px-4 text-lg font-medium rounded-md cursor-pointer"
+          >
+            Save
+          </div>
+        </div>
+      </CustomModal>
+      <CustomModal isOpen={detailModal} onClose={() => setDetailModal(false)}>
         <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col justify-center items-center gap-4">
           <div className="w-[40%] relative">
             {modalImgStatus !== "error" && (
@@ -78,14 +145,28 @@ const BookCard = ({ book }: { book: book }) => {
                 </p>
               </div>
 
-              <div>
+              <div className="flex items-center gap-2 w-full">
                 {book.is_available ? (
-                  <div className="shadow-lg bg-green-400 p-2 rounded-lg font-medium text-text">
-                    <button className="">Borrow</button>
+                  <div
+                    onClick={() => console.log("borrow")}
+                    className="shadow-lg bg-green-400 p-2 rounded-lg font-medium text-text w-full cursor-pointer hover:bg-opacity-90"
+                  >
+                    Borrow
                   </div>
                 ) : (
-                  <div className="shadow-lg bg-red-400 p-2 rounded-lg font-medium text-text">
+                  <div className="shadow-lg bg-red-400 p-2 rounded-lg font-medium text-text w-full">
                     Unavailable
+                  </div>
+                )}
+                {session?.user.role === "admin" && (
+                  <div
+                    onClick={() => {
+                      setEditModal(true);
+                      setDetailModal(false);
+                    }}
+                    className="shadow-lg bg-blue-500 p-2 rounded-lg font-medium text-background cursor-pointer hover:bg-opacity-90"
+                  >
+                    Edit
                   </div>
                 )}
               </div>
@@ -114,7 +195,7 @@ const BookCard = ({ book }: { book: book }) => {
         </div>
       </CustomModal>
       <div
-        onClick={BookOpen}
+        onClick={() => setDetailModal(true)}
         className={`relative flex gap-4 h-48 md:h-72 w-full max-w-md border border-gray-300 rounded-xl p-2 md:p-6 bg-white text-text overflow-hidden shadow-lg duration-500 ${
           imgStatus === "loading"
             ? "pointer-events-none"

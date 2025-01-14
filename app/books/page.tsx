@@ -143,9 +143,39 @@ export default function Books() {
         </div>
       </div>
       {loading ? (
-        <div className="flex justify-center">
-          <div className="w-7 h-7 border-4 border-t-text border-background rounded-full animate-spin"></div>
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: pageLimit }, (_, index) => (
+              <div
+                key={index}
+                className="h-48 md:h-72 flex gap-4 p-2 md:p-6 w-full max-w-md rounded-md border border-gray-300 bg-white"
+              >
+                <div
+                  className={` w-[40%] h-full rounded-lg animate-pulse bg-gray-200`}
+                ></div>
+                <div className="w-[60%]">
+                  <div className="space-y-2">
+                    <div className="w-full animate-pulse h-4 bg-gray-200 rounded-md"></div>
+                    <div className="w-full animate-pulse h-2 bg-gray-200 rounded-md"></div>
+                    <div className="w-full animate-pulse h-2 bg-gray-200 rounded-md"></div>
+                  </div>
+                  <br />
+                  <div className="space-y-2">
+                    <div className="w-full animate-pulse h-4 bg-gray-200 rounded-md"></div>
+                    <div className="w-full animate-pulse h-2 bg-gray-200 rounded-md"></div>
+                    <div className="w-full animate-pulse h-2 bg-gray-200 rounded-md"></div>
+                  </div>
+                  <br />
+                  <div className="space-y-2 hidden md:block">
+                    <div className="w-full animate-pulse h-4 bg-gray-200 rounded-md"></div>
+                    <div className="w-full animate-pulse h-2 bg-gray-200 rounded-md"></div>
+                    <div className="w-full animate-pulse h-2 bg-gray-200 rounded-md"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       ) : books && books.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

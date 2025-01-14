@@ -16,7 +16,7 @@ const Header = () => {
   };
   return (
     <>
-      <div className={`h-20 flex md:hidden px-5 items-center justify-between`}>
+      <div className={`h-16 flex md:hidden px-5 items-center justify-between`}>
         <Link href={"/"}>
           <h1 className={`text-2xl text-text`}>BookShelf</h1>
         </Link>
@@ -24,7 +24,7 @@ const Header = () => {
           <HiMenu className="size-7" />
         </div>
         <div
-          className={`absolute right-5 top-14 z-10 mt-2 w-36 rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none transition ease-out duration-100 ${
+          className={`absolute right-5 top-10 z-10 mt-2 w-36 rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none transition ease-out duration-100 ${
             menu
               ? "opacity-100 scale-100"
               : "opacity-0 scale-95 pointer-events-none"
@@ -38,15 +38,24 @@ const Header = () => {
             >
               Books
             </Link>
+            {session?.user.role === "admin" && (
+              <Link
+                href={"/admin"}
+                className="block px-4 py-2 text-sm text-text"
+                onClick={menuToggle}
+              >
+                Admin
+              </Link>
+            )}
             <hr />
             {status === "authenticated" ? (
               <>
                 <Link
-                  href={"#"}
+                  href={"/yourBooks"}
                   className="block px-4 py-2 text-sm text-text"
                   onClick={menuToggle}
                 >
-                  Profile
+                  Your Books
                 </Link>
                 <button
                   className="block w-full px-4 py-2 text-left text-sm text-extraa"
@@ -93,17 +102,15 @@ const Header = () => {
                 )}
               </Link>
             </li>
-            {session?.user.role === "admin" && (
-              <li className="relative cursor-pointer group text-xl text-text">
-                <Link href={"#"}>
-                  Admin
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></div>
-                  {path === "/admin" && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text"></div>
-                  )}
-                </Link>
-              </li>
-            )}
+            <li className="relative cursor-pointer group text-xl text-text">
+              <Link href={"/yourBooks"}>
+                Your Books
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></div>
+                {path === "/yourBooks" && (
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text"></div>
+                )}
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -137,14 +144,16 @@ const Header = () => {
                 }`}
               >
                 <div className="py-1" role="none">
-                  <Link
-                    href={"#"}
-                    className="block px-4 py-2 text-sm text-text"
-                    onClick={menuToggle}
-                  >
-                    Profile
-                  </Link>
-
+                  {session?.user.role === "admin" && (
+                    <Link
+                      href={"/admin"}
+                      className="block px-4 py-2 text-sm text-text"
+                      onClick={menuToggle}
+                    >
+                      Admin
+                    </Link>
+                  )}
+                  <hr />
                   <button
                     className="block w-full px-4 py-2 text-left text-sm text-extraa"
                     onClick={() => signOut()}
@@ -155,7 +164,15 @@ const Header = () => {
               </div>
             </>
           ) : status === "loading" ? (
-            <div className="w-7 h-7 border-4 border-t-text border-background rounded-full animate-spin"></div>
+            <>
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-full animate-pulse bg-gray-400"></div>
+                <div className="space-y-2">
+                  <div className="w-52 h-2 rounded-full animate-pulse bg-gray-400"></div>
+                  <div className="w-52 h-2 rounded-full animate-pulse bg-gray-400"></div>
+                </div>
+              </div>
+            </>
           ) : (
             <button
               className="bg-text text-background py-2 px-5 rounded-lg w-28 flex justify-center"

@@ -46,3 +46,20 @@ export const getGenres = async () => {
     return { error: "error fetching data", status: genres.status };
   }
 };
+
+export const updateBook = async (
+  id: number,
+  copies: number,
+  availability: boolean
+) => {
+  const res = await axios.post(`${baseUrl}/updateBook`, {
+    data: {
+      id,
+      copies,
+      availability,
+    },
+  });
+  if (res.data.updateStatus === "Success") {
+    window.location.reload();
+  }
+};
