@@ -29,62 +29,66 @@ const BookCard = ({ book }: { book: book }) => {
           setDetailModal(true);
         }}
       >
-        <div className="bg-background rounded-lg p-4 md:p-6 flex items-end justify-around">
+        <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col md:flex-row md:items-end gap-4 justify-around">
           {/* <button onClick={() => window.location.reload()}>Relode</button> */}
-          <div>
-            <h1 className="text-lg font-medium">Copies</h1>
-            <div className="flex border border-text text-xl rounded-lg">
-              <div
-                className="py-2 px-4 bg-text text-background cursor-pointer rounded-l-md"
-                onClick={() => {
-                  setLatestCopies((prev) => (prev > 0 ? prev - 1 : prev));
-                }}
-              >
-                -
-              </div>
-              <div className="py-2 px-4">{latestCopies}</div>
-              <div
-                className="py-2 px-4 bg-text text-background cursor-pointer rounded-r-md"
-                onClick={() => {
-                  setLatestCopies((prev) => prev + 1);
-                }}
-              >
-                +
+          <div className="flex items-end justify-around md:w-2/3">
+            <div>
+              <h1 className=" font-medium">Copies</h1>
+              <div className="flex border border-text rounded-lg">
+                <div
+                  className="py-2 px-4 bg-text text-background cursor-pointer rounded-l-md"
+                  onClick={() => {
+                    setLatestCopies((prev) => (prev > 0 ? prev - 1 : prev));
+                  }}
+                >
+                  -
+                </div>
+                <div className="py-2 px-4">{latestCopies}</div>
+                <div
+                  className="py-2 px-4 bg-text text-background cursor-pointer rounded-r-md"
+                  onClick={() => {
+                    setLatestCopies((prev) => prev + 1);
+                  }}
+                >
+                  +
+                </div>
               </div>
             </div>
+            <div>
+              {issuingStatus ? (
+                <div
+                  onClick={() => setIssuingStatus((prev) => !prev)}
+                  className="p-1 bg-red-500 border border-red-500 bg-opacity-50 text-text rounded-md cursor-pointer"
+                >
+                  Pause Issuing
+                </div>
+              ) : (
+                <div
+                  onClick={() => setIssuingStatus((prev) => !prev)}
+                  className="p-1 bg-green-500 border border-green-500 bg-opacity-50 text-text rounded-md cursor-pointer"
+                >
+                  Unpause Issuing
+                </div>
+              )}
+            </div>
           </div>
-          <div>
-            {issuingStatus ? (
-              <div
-                onClick={() => setIssuingStatus((prev) => !prev)}
-                className="py-2 px-4 text-lg font-medium bg-red-500 border border-red-500 bg-opacity-50 text-text rounded-md cursor-pointer"
-              >
-                Pause Issuing
-              </div>
-            ) : (
-              <div
-                onClick={() => setIssuingStatus((prev) => !prev)}
-                className="py-2 px-4 text-lg font-medium bg-green-500 border border-green-500 bg-opacity-50 text-text rounded-md cursor-pointer"
-              >
-                Unpause Issuing
-              </div>
-            )}
-          </div>
-          <div
-            onClick={() => {
-              updateBook(
-                book.id,
-                latestCopies,
-                latestCopies === 0
-                  ? false
-                  : book.copies === 0 && latestCopies > 0
-                  ? true
-                  : issuingStatus
-              );
-            }}
-            className="bg-green-500 py-2 px-4 text-lg font-medium rounded-md cursor-pointer"
-          >
-            Save
+          <div className="flex justify-end">
+            <div
+              onClick={() => {
+                updateBook(
+                  book.id,
+                  latestCopies,
+                  latestCopies === 0
+                    ? false
+                    : book.copies === 0 && latestCopies > 0
+                    ? true
+                    : issuingStatus
+                );
+              }}
+              className="bg-green-500 bg-opacity-50 border border-green-500 text-text p-1 rounded-lg cursor-pointer"
+            >
+              Save
+            </div>
           </div>
         </div>
       </CustomModal>

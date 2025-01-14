@@ -10,6 +10,14 @@ export interface book {
   is_available: boolean;
 }
 
+export interface user {
+  id: number;
+  name: string;
+  email: string;
+  membership_date: string;
+  role: string;
+}
+
 export interface Error {
   error: string;
   status: number;

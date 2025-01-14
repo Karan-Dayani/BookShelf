@@ -19,10 +19,7 @@ export function CustomModal({ isOpen, onClose, children }: CustomModalProps) {
   return render
     ? createPortal(
         <div className={`modal-overlay ${isOpen && "show"}`} onClick={onClose}>
-          <div
-            className="modal m-4 md:m-0"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             {children}
           </div>
         </div>,

@@ -47,6 +47,16 @@ export const getGenres = async () => {
   }
 };
 
+export const getUsers = async () => {
+  const users = await axios.get(`${baseUrl}/getAllUsers`).then((res) => res);
+
+  if (users.status === 200) {
+    return { data: users.data, status: 200 };
+  } else {
+    return { error: "error fetching data", status: users.status };
+  }
+};
+
 export const updateBook = async (
   id: number,
   copies: number,
@@ -57,6 +67,18 @@ export const updateBook = async (
       id,
       copies,
       availability,
+    },
+  });
+  if (res.data.updateStatus === "Success") {
+    window.location.reload();
+  }
+};
+
+export const updateUser = async (id: number, role: string) => {
+  const res = await axios.post(`${baseUrl}/updateUser`, {
+    data: {
+      id,
+      role,
     },
   });
   if (res.data.updateStatus === "Success") {

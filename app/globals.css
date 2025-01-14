@@ -60,6 +60,7 @@ body {
   justify-content: center;
   align-items: center;
   transition: opacity 0.3s ease;
+  padding: 20px;
 }
 
 .modal-overlay.show {
