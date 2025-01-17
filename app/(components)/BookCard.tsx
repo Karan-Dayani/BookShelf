@@ -139,7 +139,7 @@ const BookCard = ({ book }: { book: book }) => {
       </CustomModal>
       {/* Detail modal */}
       <CustomModal isOpen={detailModal} onClose={() => setDetailModal(false)}>
-        <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col justify-center items-center gap-4">
+        <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col justify-center items-center gap-4 w-full">
           <div className="w-[40%] relative">
             {modalImgStatus !== "error" && (
               <Image
@@ -168,7 +168,7 @@ const BookCard = ({ book }: { book: book }) => {
             )}
           </div>
           {modalImgStatus !== "loading" ? (
-            <div className="space-y-2 text-center">
+            <div className="space-y-2 text-center w-full">
               <h1 className="font-extrabold text-xl md:text-2xl mb-3 text-text">
                 {book.title}{" "}
                 <span className="text-gray-500 text-lg">
