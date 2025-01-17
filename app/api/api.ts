@@ -11,6 +11,13 @@ export const addBook = async (book: Partial<book>) => {
   }
 };
 
+export const removeBook = async (id: number) => {
+  const res = await axios.post(`${baseUrl}/removeBook/${id}`);
+  if (res.data.removeStatus === "Success") {
+    window.location.reload();
+  }
+};
+
 export const fetchBooks = async (
   limit: number,
   page: number,

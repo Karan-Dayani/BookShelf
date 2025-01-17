@@ -3,13 +3,14 @@ import { book } from "../interface";
 import { useState } from "react";
 import { CustomModal } from "./CustomModal";
 import { useSession } from "next-auth/react";
-import { updateBook } from "../api/api";
+import { removeBook, updateBook } from "../api/api";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const BookCard = ({ book }: { book: book }) => {
   const { data: session } = useSession();
   const [detailModal, setDetailModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
+  const [removeModal, setRemoveModal] = useState<boolean>(false);
   const [latestCopies, setLatestCopies] = useState<number>(book.copies);
   const [issuingStatus, setIssuingStatus] = useState<boolean>(
     book.is_available
@@ -23,6 +24,41 @@ const BookCard = ({ book }: { book: book }) => {
 
   return (
     <>
+      {/* Remove Modal */}
+      <CustomModal
+        isOpen={removeModal}
+        onClose={() => {
+          setRemoveModal(false);
+          setDetailModal(true);
+        }}
+      >
+        <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col justify-center items-center gap-4">
+          <div>
+            Are you sure you want to remove{" "}
+            <span className="font-medium">{book.title}</span>?
+          </div>
+          <div className="flex items-center justify-between w-full">
+            <button
+              className="bg-blue-500 p-2 text-background rounded-lg"
+              onClick={() => {
+                setRemoveModal(false);
+                setDetailModal(true);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="bg-red-500 p-2 text-background rounded-lg"
+              onClick={() => {
+                removeBook(book.id);
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </CustomModal>
+      {/* Edit modal */}
       <CustomModal
         isOpen={editModal}
         onClose={() => {
@@ -101,6 +137,7 @@ const BookCard = ({ book }: { book: book }) => {
           </div>
         </div>
       </CustomModal>
+      {/* Detail modal */}
       <CustomModal isOpen={detailModal} onClose={() => setDetailModal(false)}>
         <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col justify-center items-center gap-4">
           <div className="w-[40%] relative">
@@ -159,6 +196,17 @@ const BookCard = ({ book }: { book: book }) => {
               </div>
 
               <div className="flex items-center gap-2 w-full">
+                {session?.user.role === "admin" && (
+                  <div
+                    onClick={() => {
+                      setRemoveModal(true);
+                      setDetailModal(false);
+                    }}
+                    className="shadow-lg bg-blue-500 p-2 rounded-lg font-medium text-background cursor-pointer hover:bg-opacity-90"
+                  >
+                    Remove
+                  </div>
+                )}
                 {book.is_available ? (
                   <div
                     onClick={() => console.log("borrow")}
@@ -207,6 +255,7 @@ const BookCard = ({ book }: { book: book }) => {
           )}
         </div>
       </CustomModal>
+      {/* Book Card */}
       <div
         onClick={() => setDetailModal(true)}
         className={`relative flex gap-4 h-48 md:h-72 w-full max-w-md border border-gray-300 rounded-xl p-2 md:p-6 bg-white text-text overflow-hidden shadow-lg duration-500 ${
