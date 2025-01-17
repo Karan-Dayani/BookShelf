@@ -2,6 +2,15 @@ import axios from "axios";
 import { book, Error } from "../interface";
 const baseUrl = "http://localhost:6969";
 
+export const addBook = async (book: Partial<book>) => {
+  const res = await axios.post(`${baseUrl}/addBook`, {
+    data: book,
+  });
+  if (res.data.addStatus === "Success") {
+    window.location.reload();
+  }
+};
+
 export const fetchBooks = async (
   limit: number,
   page: number,

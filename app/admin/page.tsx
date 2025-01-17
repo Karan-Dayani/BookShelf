@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import React, { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import UsersTable from "../(components)/UsersTable";
-// import AddBook from "../(components)/AddBook";
+import AddBook from "../(components)/AddBook";
 
 const sections = ["Dashboard", "Users", "Add Book"];
 
@@ -53,7 +53,7 @@ const Admin = () => {
         </div>
       </div>
       {section === "Users" && <UsersTable />}
-      {/* {section === "Add Book" && <AddBook />} */}
+      {section === "Add Book" && <AddBook />}
     </div>
   );
 };
