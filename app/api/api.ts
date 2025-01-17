@@ -24,10 +24,13 @@ export const fetchBooks = async (
 export const getCount = async (
   table: string,
   genre: string,
-  search: string
+  search: string,
+  role: string
 ) => {
   const count = await axios
-    .get(`${baseUrl}/count/${table}?genre=${genre}&search=${search}`)
+    .get(
+      `${baseUrl}/count/${table}?genre=${genre}&search=${search}&&role=${role}`
+    )
     .then((res) => res);
 
   if (count.status === 200) {
@@ -47,8 +50,17 @@ export const getGenres = async () => {
   }
 };
 
-export const getUsers = async () => {
-  const users = await axios.get(`${baseUrl}/getAllUsers`).then((res) => res);
+export const getUsers = async (
+  search: string,
+  role: string,
+  limit: number,
+  page: number
+) => {
+  const users = await axios
+    .get(
+      `${baseUrl}/getAllUsers?search=${search}&&role=${role}&&limit=${limit}&&page=${page}`
+    )
+    .then((res) => res);
 
   if (users.status === 200) {
     return { data: users.data, status: 200 };

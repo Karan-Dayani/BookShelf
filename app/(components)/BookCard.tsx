@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CustomModal } from "./CustomModal";
 import { useSession } from "next-auth/react";
 import { updateBook } from "../api/api";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const BookCard = ({ book }: { book: book }) => {
   const { data: session } = useSession();
@@ -29,50 +30,58 @@ const BookCard = ({ book }: { book: book }) => {
           setDetailModal(true);
         }}
       >
-        <div className="bg-background rounded-lg p-4 md:p-6 flex flex-col md:flex-row md:items-end gap-4 justify-around">
-          {/* <button onClick={() => window.location.reload()}>Relode</button> */}
-          <div className="flex items-end justify-around md:w-2/3">
+        <div className="bg-background rounded-lg p-4 md:p-6 relative">
+          <div className="flex flex-col items-center space-y-4">
             <div>
-              <h1 className=" font-medium">Copies</h1>
-              <div className="flex border border-text rounded-lg">
-                <div
-                  className="py-2 px-4 bg-text text-background cursor-pointer rounded-l-md"
-                  onClick={() => {
-                    setLatestCopies((prev) => (prev > 0 ? prev - 1 : prev));
-                  }}
-                >
-                  -
-                </div>
-                <div className="py-2 px-4">{latestCopies}</div>
-                <div
-                  className="py-2 px-4 bg-text text-background cursor-pointer rounded-r-md"
-                  onClick={() => {
-                    setLatestCopies((prev) => prev + 1);
-                  }}
-                >
-                  +
+              <div className="w-28 relative">
+                <label className="block mb-1 text-sm text-center text-slate-600">
+                  Copies
+                </label>
+                <div className="relative">
+                  <button
+                    id="decreaseButton"
+                    className="absolute left-1 top-1 rounded bg-slate-800 p-1.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                    onClick={() =>
+                      setLatestCopies((prev) => (prev > 0 ? prev - 1 : prev))
+                    }
+                  >
+                    <FaMinus className="size-4" />
+                  </button>
+                  <input
+                    id="amountInput"
+                    type="number"
+                    value={latestCopies}
+                    readOnly
+                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md text-center pl-8 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <button
+                    id="increaseButton"
+                    className="absolute right-1 top-1 rounded bg-slate-800 p-1.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                    onClick={() => setLatestCopies((prev) => prev + 1)}
+                  >
+                    <FaPlus className="size-4" />
+                  </button>
                 </div>
               </div>
             </div>
             <div>
-              {issuingStatus ? (
-                <div
-                  onClick={() => setIssuingStatus((prev) => !prev)}
-                  className="p-1 bg-red-500 border border-red-500 bg-opacity-50 text-text rounded-md cursor-pointer"
-                >
-                  Pause Issuing
-                </div>
-              ) : (
-                <div
-                  onClick={() => setIssuingStatus((prev) => !prev)}
-                  className="p-1 bg-green-500 border border-green-500 bg-opacity-50 text-text rounded-md cursor-pointer"
-                >
-                  Unpause Issuing
-                </div>
-              )}
+              <div className="block mb-1 text-sm text-slate-600">
+                Availaible
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  onChange={() => setIssuingStatus((prev) => !prev)}
+                  checked={issuingStatus}
+                  className="sr-only peer"
+                />
+                <div className="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-16 h-8 shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-6 after:w-6 after:top-1 after:left-1 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-8 peer-checked:after:content-['✔️'] peer-hover:after:scale-95 peer-checked:after:rotate-0"></div>
+              </label>
             </div>
           </div>
-          <div className="flex justify-end">
+          <div className="absolute bottom-4 right-4">
             <div
               onClick={() => {
                 updateBook(
@@ -85,7 +94,7 @@ const BookCard = ({ book }: { book: book }) => {
                     : issuingStatus
                 );
               }}
-              className="bg-green-500 bg-opacity-50 border border-green-500 text-text p-1 rounded-lg cursor-pointer"
+              className="bg-green-500 bg-opacity-50 border border-green-500 text-text text-center p-1 rounded-lg cursor-pointer"
             >
               Save
             </div>

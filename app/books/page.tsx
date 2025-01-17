@@ -68,7 +68,8 @@ export default function Books() {
       const count = await getCount(
         "books",
         selectedFilter,
-        searchInputRef.current
+        searchInputRef.current,
+        "All"
       );
       if (count.status === 200) {
         if ("data" in count) {
