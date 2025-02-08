@@ -113,3 +113,28 @@ export const updateUser = async (id: number, role: string) => {
     window.location.reload();
   }
 };
+
+export const requestBook = async (userId: number, bookId: number) => {
+  try {
+    const res = await axios.post(`${baseUrl}/requestBook`, {
+      data: {
+        userId,
+        bookId,
+      },
+    });
+
+    if (res.data.reqStatus === "Success") {
+      console.log("Request sent");
+    }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 409) {
+        alert("You have already requested this book");
+      } else {
+        console.error("Request failed:", error.response.data);
+      }
+    } else {
+      console.error("Unknown error:", error);
+    }
+  }
+};

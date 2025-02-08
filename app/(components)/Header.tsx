@@ -102,15 +102,17 @@ const Header = () => {
                 )}
               </Link>
             </li>
-            <li className="relative cursor-pointer group text-xl text-text">
-              <Link href={"/yourBooks"}>
-                Your Books
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></div>
-                {path === "/yourBooks" && (
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text"></div>
-                )}
-              </Link>
-            </li>
+            {status === "authenticated" && (
+              <li className="relative cursor-pointer group text-xl text-text">
+                <Link href={"/yourBooks"}>
+                  Your Books
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></div>
+                  {path === "/yourBooks" && (
+                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-text"></div>
+                  )}
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
 

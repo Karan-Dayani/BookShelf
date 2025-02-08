@@ -3,7 +3,7 @@ import { book } from "../interface";
 import { useState } from "react";
 import { CustomModal } from "./CustomModal";
 import { useSession } from "next-auth/react";
-import { removeBook, updateBook } from "../api/api";
+import { removeBook, updateBook, requestBook } from "../api/api";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const BookCard = ({ book }: { book: book }) => {
@@ -209,7 +209,9 @@ const BookCard = ({ book }: { book: book }) => {
                 )}
                 {book.is_available ? (
                   <div
-                    onClick={() => console.log("borrow")}
+                    onClick={() =>
+                      requestBook(session?.user?.id as number, book.id)
+                    }
                     className="shadow-lg bg-green-400 p-2 rounded-lg font-medium text-text w-full cursor-pointer hover:bg-opacity-90"
                   >
                     Borrow

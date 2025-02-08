@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import UsersTable from "../(components)/UsersTable";
 import AddBook from "../(components)/AddBook";
+import AdminDashboard from "../(components)/AdminDashboard";
 
 const sections = ["Dashboard", "Users", "Add Book"];
 
@@ -52,6 +53,7 @@ const Admin = () => {
           </div>
         </div>
       </div>
+      {section === "Dashboard" && <AdminDashboard />}
       {section === "Users" && <UsersTable />}
       {section === "Add Book" && <AddBook />}
     </div>
