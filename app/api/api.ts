@@ -130,11 +130,27 @@ export const requestBook = async (userId: number, bookId: number) => {
     if (axios.isAxiosError(error) && error.response) {
       if (error.response.status === 409) {
         alert("You have already requested this book");
+      } else if (error.response.status === 400) {
+        alert("Cannot request more than 3 books");
       } else {
         console.error("Request failed:", error.response.data);
       }
     } else {
       console.error("Unknown error:", error);
+    }
+  }
+};
+
+export const getUsersBooks = async (userId: number) => {
+  if (userId) {
+    const res = await axios
+      .get(`${baseUrl}/usersBooks/${userId}`)
+      .then((res) => res);
+
+    if (res.status === 200) {
+      return { data: res.data, status: 200 };
+    } else {
+      return { error: "error fetching data", status: res.status };
     }
   }
 };
