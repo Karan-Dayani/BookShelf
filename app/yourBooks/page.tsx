@@ -38,6 +38,12 @@ const YourBooks = () => {
                 height={200}
                 className={`rounded-lg object-cover w-full h-full`}
               />
+              {book.status !== "requested" && (
+                <div>
+                  <p>Issue Date: {new Date(book.issue_date!).toDateString()}</p>
+                  <p>Due Date: {new Date(book.due_date!).toDateString()}</p>
+                </div>
+              )}
               <div className="flex gap-2">
                 <p className="capitalize bg-green-300 rounded-md w-full px-2 py-1">
                   {book.status}
