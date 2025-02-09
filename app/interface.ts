@@ -10,7 +10,7 @@ export interface book {
   is_available: boolean;
 }
 
-export interface usersBooks {
+export interface borrow {
   id: number;
   user_id: number;
   book_id: number;

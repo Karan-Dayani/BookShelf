@@ -39,9 +39,9 @@ export const fetchBooks = async (
 
 export const getCount = async (
   table: string,
-  genre: string,
-  search: string,
-  role: string
+  genre?: string,
+  search?: string,
+  role?: string
 ) => {
   const count = await axios
     .get(
@@ -152,5 +152,16 @@ export const getUsersBooks = async (userId: number) => {
     } else {
       return { error: "error fetching data", status: res.status };
     }
+  }
+};
+
+export const getRequests = async (limit: number, page: number) => {
+  const res = await axios
+    .get(`${baseUrl}/getRequests?limit=${limit}&&page=${page}`)
+    .then((res) => res);
+  if (res.status === 200) {
+    return { data: res.data, status: 200 };
+  } else {
+    return { error: "error fetching data", status: res.status };
   }
 };

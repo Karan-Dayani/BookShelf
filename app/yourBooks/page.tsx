@@ -2,13 +2,13 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { getUsersBooks } from "../api/api";
-import { usersBooks } from "../interface";
+import { borrow } from "../interface";
 import Image from "next/image";
 
 const YourBooks = () => {
   const { data: session, status } = useSession();
   const userId = session?.user?.id as number;
-  const [books, setBooks] = useState<usersBooks[]>([]);
+  const [books, setBooks] = useState<borrow[]>([]);
 
   useEffect(() => {
     const fetchBooks = async () => {
