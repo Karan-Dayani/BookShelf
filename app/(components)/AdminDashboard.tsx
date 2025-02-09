@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCount, getRequests } from "../api/api";
+import { approveRequests, getCount, getRequests } from "../api/api";
 import { borrow } from "../interface";
 import Pagination from "./Pagination";
 
@@ -58,7 +58,10 @@ const AdminDashboard = () => {
                 </td>
                 <td className="p-2">{request.book_details?.copies}</td>
                 <td className="p-2">
-                  <button className="bg-green-300 rounded-md w-fit px-2 py-1">
+                  <button
+                    className="bg-green-300 rounded-md w-fit px-2 py-1"
+                    onClick={() => approveRequests(request.id)}
+                  >
                     Approve
                   </button>
                 </td>

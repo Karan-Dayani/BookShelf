@@ -7,7 +7,7 @@ import { removeBook, updateBook, requestBook } from "../api/api";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 
 const BookCard = ({ book }: { book: book }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [detailModal, setDetailModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [removeModal, setRemoveModal] = useState<boolean>(false);
@@ -208,14 +208,16 @@ const BookCard = ({ book }: { book: book }) => {
                   </div>
                 )}
                 {book.is_available ? (
-                  <div
-                    onClick={() =>
-                      requestBook(session?.user?.id as number, book.id)
-                    }
+                  <button
+                    onClick={() => {
+                      requestBook(session?.user?.id as number, book.id);
+                      setDetailModal(false);
+                    }}
+                    disabled={status === "unauthenticated" ? true : false}
                     className="shadow-lg bg-green-400 p-2 rounded-lg font-medium text-text w-full cursor-pointer hover:bg-opacity-90"
                   >
                     Borrow
-                  </div>
+                  </button>
                 ) : (
                   <div className="shadow-lg bg-red-400 p-2 rounded-lg font-medium text-text w-full">
                     Unavailable

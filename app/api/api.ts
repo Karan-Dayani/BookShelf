@@ -2,6 +2,36 @@ import axios from "axios";
 import { book, Error } from "../interface";
 const baseUrl = "http://localhost:6969";
 
+export const getCount = async (
+  table: string,
+  genre?: string,
+  search?: string,
+  role?: string
+) => {
+  const count = await axios
+    .get(
+      `${baseUrl}/count/${table}?genre=${genre}&search=${search}&&role=${role}`
+    )
+    .then((res) => res);
+
+  if (count.status === 200) {
+    return { data: count.data, status: 200 };
+  } else {
+    return { error: "error fetching data", status: count.status };
+  }
+};
+
+export const getGenres = async () => {
+  const genres = await axios.get(`${baseUrl}/genres`).then((res) => res);
+
+  if (genres.status === 200) {
+    return { data: genres.data, status: 200 };
+  } else {
+    return { error: "error fetching data", status: genres.status };
+  }
+};
+
+//* Books
 export const addBook = async (book: Partial<book>) => {
   const res = await axios.post(`${baseUrl}/addBook`, {
     data: book,
@@ -37,35 +67,24 @@ export const fetchBooks = async (
   }
 };
 
-export const getCount = async (
-  table: string,
-  genre?: string,
-  search?: string,
-  role?: string
+export const updateBook = async (
+  id: number,
+  copies: number,
+  availability: boolean
 ) => {
-  const count = await axios
-    .get(
-      `${baseUrl}/count/${table}?genre=${genre}&search=${search}&&role=${role}`
-    )
-    .then((res) => res);
-
-  if (count.status === 200) {
-    return { data: count.data, status: 200 };
-  } else {
-    return { error: "error fetching data", status: count.status };
+  const res = await axios.post(`${baseUrl}/updateBook`, {
+    data: {
+      id,
+      copies,
+      availability,
+    },
+  });
+  if (res.data.updateStatus === "Success") {
+    window.location.reload();
   }
 };
 
-export const getGenres = async () => {
-  const genres = await axios.get(`${baseUrl}/genres`).then((res) => res);
-
-  if (genres.status === 200) {
-    return { data: genres.data, status: 200 };
-  } else {
-    return { error: "error fetching data", status: genres.status };
-  }
-};
-
+//* Users
 export const getUsers = async (
   search: string,
   role: string,
@@ -85,23 +104,6 @@ export const getUsers = async (
   }
 };
 
-export const updateBook = async (
-  id: number,
-  copies: number,
-  availability: boolean
-) => {
-  const res = await axios.post(`${baseUrl}/updateBook`, {
-    data: {
-      id,
-      copies,
-      availability,
-    },
-  });
-  if (res.data.updateStatus === "Success") {
-    window.location.reload();
-  }
-};
-
 export const updateUser = async (id: number, role: string) => {
   const res = await axios.post(`${baseUrl}/updateUser`, {
     data: {
@@ -114,6 +116,7 @@ export const updateUser = async (id: number, role: string) => {
   }
 };
 
+//* Borrowing
 export const requestBook = async (userId: number, bookId: number) => {
   try {
     const res = await axios.post(`${baseUrl}/requestBook`, {
@@ -163,5 +166,16 @@ export const getRequests = async (limit: number, page: number) => {
     return { data: res.data, status: 200 };
   } else {
     return { error: "error fetching data", status: res.status };
+  }
+};
+
+export const approveRequests = async (requestId: number) => {
+  const res = await axios.post(`${baseUrl}/approveRequests`, {
+    data: {
+      requestId,
+    },
+  });
+  if (res.data.ApprovalStatus === "Success") {
+    window.location.reload();
   }
 };
