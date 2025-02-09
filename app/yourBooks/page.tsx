@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { getUsersBooks } from "../api/api";
+import { cancelRequest, getUsersBooks } from "../api/api";
 import { borrow } from "../interface";
 import Image from "next/image";
 
@@ -49,7 +49,10 @@ const YourBooks = () => {
                   {book.status}
                 </p>
                 {book.status === "requested" ? (
-                  <button className="bg-red-300 rounded-md w-fit px-2 py-1">
+                  <button
+                    className="bg-red-300 rounded-md w-fit px-2 py-1"
+                    onClick={() => cancelRequest(book.id)}
+                  >
                     Cancel
                   </button>
                 ) : book.status === "borrowed" ? (

@@ -179,3 +179,14 @@ export const approveRequests = async (requestId: number) => {
     window.location.reload();
   }
 };
+
+export const cancelRequest = async (requestId: number) => {
+  const res = await axios.post(`${baseUrl}/cancelRequest`, {
+    data: {
+      requestId,
+    },
+  });
+  if (res.data.cancelStatus === "Success") {
+    window.location.reload();
+  }
+};
