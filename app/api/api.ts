@@ -190,3 +190,17 @@ export const cancelRequest = async (requestId: number) => {
     window.location.reload();
   }
 };
+
+export const returnBook = async (borrowId: number) => {
+  const res = await axios.post(`${baseUrl}/returnBook`, {
+    data: {
+      borrowId,
+    },
+  });
+  if (res.data.returnStatus === "Success") {
+    alert(res.data.message + ", fine: " + res.data.fine);
+    setTimeout(function () {
+      window.location.reload();
+    }, 5000);
+  }
+};
