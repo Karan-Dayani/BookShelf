@@ -24,18 +24,21 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user }) {
       const existingUser = await axios
-        .get(`http://localhost:6969/getUser/${user.email}`)
+        .get(`https://bookshelf-backend-azure.vercel.app/getUser/${user.email}`)
         .then((res) => res.data);
 
       if (!existingUser) {
-        await axios.post("http://localhost:6969/createUser", {
-          data: {
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            role: "member",
-          },
-        });
+        await axios.post(
+          "https://bookshelf-backend-azure.vercel.app/createUser",
+          {
+            data: {
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              role: "member",
+            },
+          }
+        );
       }
 
       return true;
@@ -43,7 +46,9 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         const dbUser = await axios
-          .get(`http://localhost:6969/getUser/${token.email}`)
+          .get(
+            `https://bookshelf-backend-azure.vercel.app/getUser/${token.email}`
+          )
           .then((res) => res.data[0]);
         console.log(dbUser);
         token.id = dbUser?.id;
