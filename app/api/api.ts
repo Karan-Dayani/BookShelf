@@ -1,6 +1,6 @@
 import axios from "axios";
 import { book, Error } from "../interface";
-const baseUrl = "http://localhost:6969";
+const baseUrl = "https://bookshelf-backend-azure.vercel.app";
 
 export const getCount = async (
   table: string,
